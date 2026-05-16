@@ -1,8 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { createCategory, deleteCategory } from "@/app/lib/db";
-import { prisma } from "@/app/lib/db";
+import { createCategory, updateCategory, deleteCategory } from "@/app/lib/db";
 
 export async function createCategoryAction(formData: FormData) {
   const name = formData.get("name") as string;
@@ -19,14 +18,10 @@ export async function updateCategoryAction(formData: FormData) {
   const description = formData.get("description") as string;
   const color = formData.get("color") as string;
   if (!id || !name?.trim()) return;
-
-  await prisma.category.update({
-    where: { id },
-    data: {
-      name: name.trim(),
-      description: description?.trim() ?? "",
-      color: color || "#3b82f6",
-    },
+  await updateCategory(id, {
+    name: name.trim(),
+    description: description?.trim() ?? "",
+    color: color || "#3b82f6",
   });
   revalidatePath("/categories");
 }
