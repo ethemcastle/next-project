@@ -2,15 +2,31 @@
 
 import { createContext, useContext } from "react";
 
-type Category = { id: string; name: string; createdAt: Date; _count: { products: number } };
+type Category = {
+  id: string;
+  name: string;
+  description: string;
+  color: string;
+  createdAt: Date;
+  _count: { products: number };
+};
+
 type Product = {
   id: string;
   name: string;
+  description: string;
   price: number;
+  cost: number;
   stock: number;
+  minStock: number;
+  sku: string;
+  imageUrl: string;
+  status: string;
   categoryId: string;
-  category: { id: string; name: string };
+  category: { id: string; name: string; color: string };
+  _count: { sales: number };
   createdAt: Date;
+  updatedAt: Date;
 };
 
 type ProductsContextType = {
@@ -19,6 +35,8 @@ type ProductsContextType = {
 };
 
 const ProductsContext = createContext<ProductsContextType | null>(null);
+
+export type { Product, Category };
 
 export function ProductsProvider({
   children,
@@ -41,4 +59,3 @@ export function useProducts() {
   if (!ctx) throw new Error("useProducts must be used within ProductsProvider");
   return ctx;
 }
-
